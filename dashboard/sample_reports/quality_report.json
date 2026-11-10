@@ -1,0 +1,18 @@
+{
+  "generated_at_utc": "2026-11-10T16:14:15.869068+00:00",
+  "source_rows": 1067371,
+  "accepted_rows": 1067366,
+  "quarantined_rows": 5,
+  "quarantine_rate": 5e-06,
+  "duplicate_source_ids": 0,
+  "duplicate_accepted_ids": 0,
+  "accepted_rows_missing_required_fields": 0,
+  "checks": {
+    "source_reconciles_to_accepted_plus_quarantine": true,
+    "source_row_ids_are_unique": true,
+    "accepted_row_ids_are_unique": true,
+    "accepted_rows_have_required_fields": true,
+    "quarantine_rate_below_10_percent": true
+  },
+  "status": "passed"
+}

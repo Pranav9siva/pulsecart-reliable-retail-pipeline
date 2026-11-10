@@ -9,7 +9,19 @@ import streamlit as st
 
 
 PROJECT_ROOT = Path(os.environ.get("PULSECART_HOME", Path(__file__).resolve().parents[1])).resolve()
-REPORT_ROOT = PROJECT_ROOT / "data" / "reports"
+DEFAULT_REPORT_ROOT = Path(os.environ.get("PULSECART_REPORTS", PROJECT_ROOT / "data" / "reports")).resolve()
+SAMPLE_REPORT_ROOT = Path(__file__).resolve().parent / "sample_reports"
+_REPORT_FILES = ("daily_sales.csv", "top_products.csv", "quality_report.json", "summary.json")
+
+if all((DEFAULT_REPORT_ROOT / name).is_file() for name in _REPORT_FILES):
+    REPORT_ROOT = DEFAULT_REPORT_ROOT
+    USING_SAMPLE_REPORTS = False
+elif all((SAMPLE_REPORT_ROOT / name).is_file() for name in _REPORT_FILES):
+    REPORT_ROOT = SAMPLE_REPORT_ROOT
+    USING_SAMPLE_REPORTS = True
+else:
+    REPORT_ROOT = DEFAULT_REPORT_ROOT
+    USING_SAMPLE_REPORTS = False
 
 
 @st.cache_data(ttl=60)
@@ -39,7 +51,7 @@ st.set_page_config(
 )
 
 st.title("PulseCart | Retail Performance")
-st.caption("Historical UCI Online Retail II transactions • GBP • Refreshed from the latest pipeline reports")
+st.caption("Historical UCI Online Retail II transactions • GBP • Latest pipeline output or bundled demo snapshot")
 
 required_reports = (
     REPORT_ROOT / "daily_sales.csv",
@@ -48,6 +60,8 @@ required_reports = (
     REPORT_ROOT / "summary.json",
 )
 missing_reports = [path.name for path in required_reports if not path.exists()]
+if USING_SAMPLE_REPORTS:
+    st.info("Showing the bundled demo snapshot because no local Airflow reports were found.")
 if missing_reports:
     st.warning("Pipeline reports are not available yet. Run the pulsecart_retail_batch DAG, then refresh this page.")
     st.caption("Missing: " + ", ".join(missing_reports))
@@ -145,5 +159,3 @@ quality_cols[3].metric("Quarantine rate", f"{float(quality.get('quarantine_rate'
 
 last_generated = summary.get("generated_at_utc", "not recorded")
 st.caption(f"Reports generated at {last_generated} • Source: UCI Online Retail II")
-
-

@@ -152,3 +152,7 @@ Dockerfile          Airflow image with Java and project dependencies
 
 
 
+
+## Deploy the dashboard
+
+The Streamlit dashboard can be deployed from this public GitHub repository using [Streamlit Community Cloud](https://share.streamlit.io). Select the `main` branch and `dashboard/app.py` as the app file; Streamlit reads `dashboard/requirements.txt` beside the entrypoint. The hosted app uses the bundled aggregate snapshot in `dashboard/sample_reports` so it works without running Airflow, Spark, or Kafka. In Docker, the dashboard prefers fresh files from `data/reports` when available.
