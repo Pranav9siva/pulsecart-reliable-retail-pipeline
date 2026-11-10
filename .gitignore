@@ -1,0 +1,13 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+.env
+airflow.db
+data/source/
+data/events/incoming/
+data/lake/
+data/reports/
+logs/
+
+data/raw/online_retail_II.xlsx
